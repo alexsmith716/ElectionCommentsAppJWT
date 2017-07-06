@@ -7,6 +7,12 @@ var nocache = require('nocache')
 var auth = require('../../shared/auth')
 var csrf = require('csurf')
 var csrfProtection = csrf({ cookie: true })
+var jwt = require('express-jwt')
+
+var authX = jwt({
+  secret: process.env.JWT_SECRET,
+  userProperty: 'payload'
+})
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

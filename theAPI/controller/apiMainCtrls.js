@@ -750,25 +750,14 @@ module.exports.ajaxLoginUser = function (req, res, next) {
 
           } else {
 
-            req.logIn(user, function (err) {
+            user.generateJwt(function (err, token) {
 
-              if (err) { 
+              if (err) {
                 return next(err)
               }
 
-              user.previouslogin = user.lastlogin
-              user.lastlogin = new Date()
-
-              user.save(function (err, success) {
-
-                if (err) {
-                  return next(err)
-                }
-
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxLoginUser 2 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
-                sendJSONresponse(res, 201, { 'response': 'success', 'redirect': 'https://localhost:3000/userhome' })
-
-              })
+              console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxLoginUser > token: ', token)
+              sendJSONresponse(res, 200, { 'response': 'success', 'token': token, 'redirect': 'https://localhost:3000/userhome' })
             })
           }
         })(req, res)
