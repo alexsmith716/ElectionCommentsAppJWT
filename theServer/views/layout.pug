@@ -1,0 +1,128 @@
+include mixins/mixins
+
+doctype html
+
+html(lang="en-US")
+
+  head
+  
+    meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    block metas
+
+    block title
+
+    link(href='data:image/x-icon;', type='image/x-icon', rel='shortcut icon') 
+    intercept-url(pattern="/favicon.ico" access="ROLE_ANONYMOUS")
+    link(href='/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/css/main1.css', rel='stylesheet')
+    block links
+
+    script(src='/jquery/jquery-min-3.2.1.js')
+    script(src='/bootstrap/js/bootstrap.min.js')
+    block headScripts
+
+  body
+
+    .wrapper
+
+      header
+        .header
+          nav.navbar.navbar-default.navbar-static-top
+            .container
+              .navbar-header
+                button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false',  aria-controls='navbar')
+                  span.sr-only Toggle navigation
+                  span.icon-bar
+                  span.icon-bar
+                  span.icon-bar
+                a.brand(href='/')
+                  <!-- img(width="225" src="/images/logo-2016-2.jpg") -->
+
+              .navbar-collapse.collapse(id='navbar', aria-expanded='false', style='height: 1px;')
+                ul.nav.navbar-nav.navbar-right
+
+                  if currentUser
+
+                    if reqUrl !== '/userhome'
+                      li
+                        a.navbar-link(href='/userhome', data-toggle='collapse', data-target='.navbar-collapse.in') User Home
+
+                    if reqUrl !== '/membersonly'
+                      li
+                        a.navbar-link(href='/membersonly', data-toggle='collapse', data-target='.navbar-collapse.in') Members Only!
+
+                    li 
+                      a.login-link(href='/logout', data-toggle='collapse', data-target='.navbar-collapse.in') Log Out
+
+                    if reqUrl !== '/customerservice'
+                      li
+                        a.navbar-link(href='/signup', data-toggle='collapse', data-target='.navbar-collapse.in') Customer Service
+
+                    if reqUrl !== '/contact'
+                      li
+                        a.navbar-link(href='/signup', data-toggle='collapse', data-target='.navbar-collapse.in') Contact
+
+                    if reqUrl !== '/team'
+                      li
+                        a.navbar-link(href='/signup', data-toggle='collapse', data-target='.navbar-collapse.in') Team
+
+                    if reqUrl !== '/about'
+                      li
+                        a.navbar-link(href='/signup', data-toggle='collapse', data-target='.navbar-collapse.in') About
+
+                  else
+
+                    if reqUrl !== '/'
+                      li
+                        a.navbar-link(href='/', data-toggle='collapse', data-target='.navbar-collapse.in') Homepage
+
+                    if reqUrl !== '/loginorsignup'
+                      li
+                        a.navbar-link(href='/membersonly', data-toggle='collapse', data-target='.navbar-collapse.in') Members Only!
+
+                    if reqUrl !== '/login'
+                      li
+                        a.login-link(href='/login', data-toggle='collapse', data-target='.navbar-collapse.in') Log In
+
+                    if reqUrl !== '/signup'
+                      li
+                        a.signup-link(href='/signup', data-toggle='collapse', data-target='.navbar-collapse.in') Sign Up
+
+                    if reqUrl !== '/customerservice'
+                      li
+                        a.navbar-link(href='/customerservice', data-toggle='collapse', data-target='.navbar-collapse.in') Customer Service
+
+                    if reqUrl !== '/contact'
+                      li
+                        a.navbar-link(href='/contact', data-toggle='collapse', data-target='.navbar-collapse.in') Contact
+
+                    if reqUrl !== '/team'
+                      li
+                        a.navbar-link(href='/team', data-toggle='collapse', data-target='.navbar-collapse.in') Team
+
+                    if reqUrl !== '/about'
+                      li
+                        a.navbar-link(href='/about', data-toggle='collapse', data-target='.navbar-collapse.in') About
+
+
+          if (multipleUserSession !== undefined)
+            .alert.alert-warning(role="alert") Alert: multiple instances of users have logged on to this account.
+
+      .view
+
+        script.
+          var isSafari = (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1)
+          var interactiveFormValidationEnabled = false
+          var appVersion = navigator.appVersion
+          var webkitVersion1 = appVersion.indexOf('AppleWebKit/') + 12
+          var webkitVersion2 = webkitVersion1 + 3
+          var webkitVersion = appVersion.slice(webkitVersion1, webkitVersion2)
+          webkitVersion = parseInt(webkitVersion, 10)
+          if (webkitVersion >= 603 || !isSafari)
+            interactiveFormValidationEnabled = true
+
+        block content
+
+    block bodyScripts

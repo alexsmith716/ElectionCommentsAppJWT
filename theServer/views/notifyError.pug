@@ -1,0 +1,40 @@
+
+extends layout
+
+block metas
+
+block title
+  title An Application Error Has Occurred
+
+block links
+
+block headScripts
+
+block bodyScripts
+
+block content
+
+  .main
+
+    .container
+
+      .row
+
+        .col-lg-10.col-centered
+
+          .panel-body
+
+            h3.err-title
+
+            .alertSuccess.alert.alert-success.hide(role="alert", style="margin-top: 10px; margin-bottom: 22px;")
+            .alertWarning.alert.alert-warning.hide(role="alert", style="margin-top: 10px; margin-bottom: 22px;")
+            .alertDanger.alert.alert-danger.hide(role="alert", style="margin-top: 10px; margin-bottom: 22px;")
+
+            div(id="errScrollbox")
+
+  - if ( err )
+    script.
+      $('.err-title').html( '!{err.title}' )
+      $('.alertDanger').html( '!{err.alert}' )
+      $('#errScrollbox').html( '!{err.message}' )
+      $('.alertDanger').addClass('show').removeClass('hide')
