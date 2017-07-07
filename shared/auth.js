@@ -1,4 +1,5 @@
 
+var jwt = require('express-jwt')
 var customErrorObject = require('./customErrorObject')
 var newObjectErrorEnumerable = require('./newObjectErrorEnumerable')
 
@@ -6,6 +7,31 @@ var sendJSONresponse = function(res, status, content) {
   res.status(status)
   res.json(content)
 }
+
+
+// req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer'
+module.exports.JWTAuthAPI = function (req, res, next) {
+
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> JWTAuthAPI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+  /*
+  jwt({ 
+    secret: process.env.JWT_SECRET, 
+    credentialsRequired: true,
+  
+    getToken: function fromHeaderOrQuerystring (req) {
+  
+      if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        return req.headers.authorization.split(' ')[1];
+      } else if (req.query && req.query.token) {
+        return req.query.token;
+      }
+      return null;
+    }
+  })
+  */
+
+}
+
 
 module.exports.ensureAuthenticated = function (req, res, next) {
   if (req.isAuthenticated()) {
@@ -16,7 +42,7 @@ module.exports.ensureAuthenticated = function (req, res, next) {
   }
 }
 
-module.exports.basicAuthenticationAPI = function (req, res, next) {
+module.exports.basicAuthAPI = function (req, res, next) {
   var hAuth = req.headers['authorization']
   var expr = /Basic/
   if (hAuth !== undefined && expr.test(hAuth)) {

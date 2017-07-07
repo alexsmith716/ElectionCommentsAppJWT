@@ -7,12 +7,9 @@ var nocache = require('nocache')
 var auth = require('../../shared/auth')
 var csrf = require('csurf')
 var csrfProtection = csrf({ cookie: true })
-var jwt = require('express-jwt')
 
-var authX = jwt({
-  secret: process.env.JWT_SECRET,
-  userProperty: 'payload'
-})
+var jwt = require('express-jwt')
+var jwtAuth = jwt({ secret: process.env.JWT_SECRET, userProperty: 'payload' })
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -32,6 +29,7 @@ router.put('/userprofile', csrfProtection, auth.ensureAuthenticated, apiControll
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+router.post('/userhome', csrfProtection, apiControllers.ajaxUserHome)
 router.post('/usersignup', csrfProtection, apiControllers.expectedResponseSignUp, apiControllers.ajaxEvaluateUserEmail)
 router.post('/userprofile', csrfProtection, apiControllers.expectedResponseUserProfile, apiControllers.ajaxEvaluateUserEmail)
 
@@ -41,13 +39,13 @@ router.put('/newuserdatapathchange', csrfProtection, auth.ensureAuthenticated, a
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-router.get('/userprofile/:userid', csrfProtection, auth.basicAuthenticationAPI, apiControllers.getUserProfileResponse)
+router.get('/userprofile/:userid', csrfProtection, auth.basicAuthAPI, apiControllers.getUserProfileResponse)
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-router.get('/comments', csrfProtection, auth.basicAuthenticationAPI, apiControllers.getCommentsResponse)
-router.post('/comments/maincomment', csrfProtection, auth.basicAuthenticationAPI, apiControllers.postMainCommentResponse)
-router.post('/comments/subcomment/:subcommentid', csrfProtection, auth.basicAuthenticationAPI, apiControllers.postSubCommentResponse)
-router.get('/:commentid', csrfProtection, auth.basicAuthenticationAPI, apiControllers.getOneCommentResponse)
+router.get('/comments', csrfProtection, auth.basicAuthAPI, apiControllers.getCommentsResponse)
+router.post('/comments/maincomment', csrfProtection, auth.basicAuthAPI, apiControllers.postMainCommentResponse)
+router.post('/comments/subcomment/:subcommentid', csrfProtection, auth.basicAuthAPI, apiControllers.postSubCommentResponse)
+router.get('/:commentid', csrfProtection, auth.basicAuthAPI, apiControllers.getOneCommentResponse)
 
 module.exports = router
