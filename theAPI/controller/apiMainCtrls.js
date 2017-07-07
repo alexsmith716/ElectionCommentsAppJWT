@@ -707,6 +707,14 @@ module.exports.ajaxForgotPassword = function (req, res, next) {
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
+module.exports.ajaxUserHome = function (req, res, next) {
+
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxUserHome')
+  sendJSONresponse(res, 200, { 'response': 'success', 'redirect': 'https://localhost:3000/userhome' })
+
+}
+
+
 module.exports.ajaxLoginUser = function (req, res, next) {
 
   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxLoginUser 1 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
@@ -750,14 +758,16 @@ module.exports.ajaxLoginUser = function (req, res, next) {
 
           } else {
 
-            user.generateJwt(function (err, token) {
+            user.generateJWT(function (err, token) {
 
               if (err) {
+                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxLoginUser > generateJWT > err: ', err)
                 return next(err)
               }
 
-              console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxLoginUser > token: ', token)
-              sendJSONresponse(res, 200, { 'response': 'success', 'token': token, 'redirect': 'https://localhost:3000/userhome' })
+              console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxLoginUser > generateJWT > token: ', token)
+              res.set('authorization', 'Bearer ' + token)
+              sendJSONresponse(res, 200, { 'response': 'success', 'token': token, 'redirect': 'https://localhost:3000/api/userhome' })
             })
           }
         })(req, res)

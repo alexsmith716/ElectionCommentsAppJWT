@@ -50,17 +50,6 @@ block content
 
           div(align="center")
 
-            div
-              - var isodate= `${currentUser.previouslogin}`
-              - var millis = Date.parse(isodate)
-
-              .text-muted.alertEditUser
-                small
-                  i Last login:
-                    | &nbsp;
-                    +newAppDate(millis,true)
-              br
-              br
 
             div
               a.btn.btn-primary.btn-md(href="/userprofile") Account Settings

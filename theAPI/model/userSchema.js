@@ -132,21 +132,23 @@ userSchema.methods.checkPassword = function (password, cb) {
 }
 
 
-userSchema.methods.generateJwt = function (cb) {
+userSchema.methods.generateJWT = function (cb) {
 
   var newDate = new Date()
   newDate.setDate(newDate.getDate() + 7)
 
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> generateJwt > this._id: ', this._id)
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> generateJwt > this.email: ', this.email)
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> generateJwt > this.name: ', this.name)
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> userSchema > generateJWT > this._id: ', this._id)
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> userSchema > generateJWT > this.email: ', this.email)
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> userSchema > generateJWT > this.name: ', this.name)
 
   jwt.sign( { _id: this._id, email: this.email, name: this.name, exp: parseInt(newDate.getTime() / 1000) }, process.env.JWT_SECRET, function (err, token) {
 
     if (err) {
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> userSchema > generateJWT > err: ', err)
       return cb(err)
     }
 
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> userSchema > generateJWT > token: ', token)
     cb(null, token)
   })
 }

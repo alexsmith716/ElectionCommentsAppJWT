@@ -246,6 +246,7 @@ module.exports.getSignup = function (req, res, next) {
 
 module.exports.getUserHome = function (req, res, next) {
 
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> getUserHome')
   res.render('userHome', { err: req.session.renderableErr }, function (err, html) {
 
     if (err) {
