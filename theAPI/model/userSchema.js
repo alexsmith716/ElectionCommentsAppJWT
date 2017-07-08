@@ -137,11 +137,7 @@ userSchema.methods.generateJWT = function (cb) {
   var newDate = new Date()
   newDate.setDate(newDate.getDate() + 7)
 
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> userSchema > generateJWT > this._id: ', this._id)
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> userSchema > generateJWT > this.email: ', this.email)
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> userSchema > generateJWT > this.name: ', this.name)
-
-  jwt.sign( { _id: this._id, email: this.email, name: this.name, exp: parseInt(newDate.getTime() / 1000) }, process.env.JWT_SECRET, function (err, token) {
+  jwt.sign( { _id: this._id, name: this.datecreated, exp: parseInt(newDate.getTime() / 1000) }, process.env.JWT_SECRET, function (err, token) {
 
     if (err) {
       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> userSchema > generateJWT > err: ', err)
@@ -154,3 +150,24 @@ userSchema.methods.generateJWT = function (cb) {
 }
 
 mongoose.model('User', userSchema)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
