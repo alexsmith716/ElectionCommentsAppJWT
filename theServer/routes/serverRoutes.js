@@ -9,12 +9,12 @@ var nocache = require('nocache')
 var auth = require('../../shared/auth')
 var csrfProtection = csrf({ cookie: true })
 
-var jwt = require('express-jwt')
-var jwtAuth = jwt({ secret: process.env.JWT_SECRET, userProperty: 'payload' })
-
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 router.use(function (req, res, next) {
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>> serverRoutes > router.use > req.method: ', req.method)
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>> serverRoutes > router.use > req.url: ', req.url)
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>> serverRoutes > router.use > req.headers: ', req.headers)
   next()
 })
 
@@ -41,7 +41,7 @@ router.get('/notifyerror', serverControllers.getNotifyError)
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-router.get('/userhome', serverControllers.getUserHome)
+router.get('/userhome', csrfProtection, auth.jwtAuthAPI, serverControllers.getUserHome)
 router.get('/membersonly', auth.ensureAuthenticated, serverControllers.getMembersOnly)
 router.get('/userprofile', csrfProtection, auth.ensureAuthenticated, serverControllers.getUserProfile)
 router.get('/logout', auth.ensureAuthenticated, serverControllers.getLogout)

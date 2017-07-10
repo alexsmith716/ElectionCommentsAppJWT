@@ -246,8 +246,12 @@ module.exports.getSignup = function (req, res, next) {
 
 module.exports.getUserHome = function (req, res, next) {
 
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> getUserHome')
-  res.render('userHome', { err: req.session.renderableErr }, function (err, html) {
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> getUserHome > req.headers: ', req.headers)
+
+  var renderableErr
+  req.session.renderableErr ? renderableErr = req.session.renderableErr : null
+
+  res.render('userHome', { err: renderableErr }, function (err, html) {
 
     if (err) {
       return next(err)

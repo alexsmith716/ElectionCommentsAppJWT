@@ -1,5 +1,5 @@
 
-var jwt = require('express-jwt')
+var ejwt = require('express-jwt')
 var customErrorObject = require('./customErrorObject')
 var newObjectErrorEnumerable = require('./newObjectErrorEnumerable')
 
@@ -8,49 +8,52 @@ var sendJSONresponse = function(res, status, content) {
   res.json(content)
 }
 
+module.exports.jwtAuthAPI = function (req, res, next) {
 
-// req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer'
-module.exports.JWTAuthAPI = function (req, res, next) {
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> jwtAuthAPI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
 
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> JWTAuthAPI <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+  ejwt({ secret: process.env.JWT_SECRET, userProperty: 'payload' })(req, res, next)
+
+
   /*
-  jwt({ 
-    secret: process.env.JWT_SECRET, 
+  ejwt({ 
+    secret: process.env.JWT_SECRET,
+    userProperty: 'payload',
     credentialsRequired: true,
-  
     getToken: function fromHeaderOrQuerystring (req) {
-  
       if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-        return req.headers.authorization.split(' ')[1];
+        return req.headers.authorization.split(' ')[1]
       } else if (req.query && req.query.token) {
-        return req.query.token;
+        return req.query.token
       }
-      return null;
+      return null
     }
-  })
+  })(req, res, next)
   */
-
 }
 
 
 module.exports.ensureAuthenticated = function (req, res, next) {
+
   if (req.isAuthenticated()) {
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ensureAuthenticated > YES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
-    next()
-  } else {
-    res.redirect('/loginorsignup')
+    return next()
   }
+
+  res.redirect('/loginorsignup')
 }
 
 module.exports.basicAuthAPI = function (req, res, next) {
+
   var hAuth = req.headers['authorization']
   var expr = /Basic/
+  var err
+
   if (hAuth !== undefined && expr.test(hAuth)) {
-    next()
-  } else {
-    var err = newObjectErrorEnumerable( new customErrorObject('Error', 'Unauthorized, missing Basic Auth headers', 401) )
-    sendJSONresponse(res, 401, err)
+    return next()
   }
+
+  err = newObjectErrorEnumerable( new customErrorObject('Error', 'Unauthorized, missing Basic Auth headers', 401) )
+  sendJSONresponse(res, 401, err)
 }
 
 module.exports.ensureAuthenticatedNewUserDataItem = function (req, res, next) {
