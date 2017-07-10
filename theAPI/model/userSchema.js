@@ -1,7 +1,7 @@
 
 var mongoose = require('mongoose')
 var crypto = require('crypto')
-var jwt = require('jsonwebtoken')
+var ejwt = require('jsonwebtoken')
 
 /*
 User
@@ -135,9 +135,9 @@ userSchema.methods.checkPassword = function (password, cb) {
 userSchema.methods.generateJWT = function (cb) {
 
   var newDate = new Date()
-  newDate.setDate(newDate.getDate() + 7)
+  newDate.setDate(newDate.getDate() + 1)
 
-  jwt.sign( { _id: this._id, datecreated: this.datecreated, exp: parseInt(newDate.getTime() / 1000) }, process.env.JWT_SECRET, function (err, token) {
+  ejwt.sign( { _id: this._id, datecreated: this.datecreated, exp: parseInt(newDate.getTime() / 1000) }, process.env.JWT_SECRET, function (err, token) {
 
     if (err) {
       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> userSchema > generateJWT > err: ', err)

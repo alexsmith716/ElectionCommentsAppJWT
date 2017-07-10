@@ -152,10 +152,9 @@ var helper = {
                 hideLoading()
 
                 window.localStorage.setItem('token', data.token)
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SUCCESS > data: ', data)
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SUCCESS > token: ', window.localStorage.getItem('token'))
-                // location.href = data.redirect
-                helper.redirectSuccessfulLogin(data.redirect)
+                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> loginForm > SUCCESS > SUCCESS > dataT: ', data.token)
+                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> loginForm > SUCCESS > SUCCESS > dataR: ', data.redirect)
+                helper.directSuccess(data.redirect)
                 
               } else {
                 hideLoading()
@@ -188,44 +187,38 @@ var helper = {
     })
   },
 
-  redirectSuccessfulLogin: function (redirect) {
+  directSuccess: function (redirect) {
 
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> directSuccess > redirect: ', redirect)
+    showLoading()
     var data = {}
-    //data['email'] = $.trim(email)
-
-    $('body').data('modalShown') ? null : helper.showLoading()
-
     data['_csrf'] = $('meta[name="csrf-token"]').attr('content')
+
+    var csrf
+    var token
 
     $.ajax({
       rejectUnauthorized: false,
       url: redirect,
-      type: 'POST',
-      data: JSON.stringify(data),
+      type: 'GET',
       dataType: 'json',
       contentType: 'application/json; charset=utf-8',
       accepts: 'application/json',
-      beforeSend : function( xhr ) { 
-        var token = window.localStorage.getItem('token')
-        console.log('>>>>>>>>>>>>>>>>>> beforeSend > token: ', token)
-        xhr.setRequestHeader( 'authorization', 'Bearer ' + token ) 
-      },
 
       success: function (data, status, xhr) {
-        $('body').data('modalShown') ? null : helper.hideLoading()
+        hideLoading()
 
         if (data.response === 'success') {
-
-          console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> redirectSuccessfulLogin > SUCCESS > data: ', data)
+          console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> directSuccess > SUCCESS > SUCCESS > data: ', data)
           location.href = data.redirect
 
         } else {
-          console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> redirectSuccessfulLogin > SUCCESS > ERR')
+          console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> directSuccess > SUCCESS > ERROR')
         }
         
       },
       error: function (xhr, status, error) {
-        $('body').data('modalShown') ? null : helper.hideLoading()
+        hideLoading()
         /*var parsedXHR = JSON.parse(xhr.responseText)
         $('#modalAlert .modal-title').html(parsedXHR.err.title)
         $('#modalAlert .alertDanger').html(parsedXHR.err.alert)
@@ -234,8 +227,15 @@ var helper = {
         $('#modalAlert').modal({ keyboard: false,backdrop: 'static' })
         cb('error')
         */
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> redirectSuccessfulLogin > ERROR > ERR')
-      }
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> directSuccess > ERROR > ERROR1: ', xhr)
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> directSuccess > ERROR > ERROR2: ', error)
+      },
+      beforeSend : function( xhr ) { 
+        csrf = $('meta[name="csrf-token"]').attr('content')
+        token = window.localStorage.getItem('token')
+        xhr.setRequestHeader( 'csrf-token', csrf )
+        xhr.setRequestHeader( 'authorization', 'Bearer ' + token )
+      },
     })
   },
 

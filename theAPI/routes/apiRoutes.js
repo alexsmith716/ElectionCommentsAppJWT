@@ -8,9 +8,6 @@ var auth = require('../../shared/auth')
 var csrf = require('csurf')
 var csrfProtection = csrf({ cookie: true })
 
-var jwt = require('express-jwt')
-var jwtAuth = jwt({ secret: process.env.JWT_SECRET, userProperty: 'payload' })
-
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 router.use(function (req, res, next) {
@@ -29,7 +26,8 @@ router.put('/userprofile', csrfProtection, auth.ensureAuthenticated, apiControll
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-router.post('/userhome', csrfProtection, apiControllers.ajaxUserHome)
+router.get('/userhome', csrfProtection, auth.jwtAuthAPI, apiControllers.ajaxUserHome)
+
 router.post('/usersignup', csrfProtection, apiControllers.expectedResponseSignUp, apiControllers.ajaxEvaluateUserEmail)
 router.post('/userprofile', csrfProtection, apiControllers.expectedResponseUserProfile, apiControllers.ajaxEvaluateUserEmail)
 

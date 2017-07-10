@@ -708,12 +708,13 @@ module.exports.ajaxForgotPassword = function (req, res, next) {
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 module.exports.ajaxUserHome = function (req, res, next) {
-
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxUserHome')
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxUserHome > req.headers1: ', req.headers)
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxUserHome > req.headers2: ', req.headers['csrf-token'])
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxUserHome > req.headers3: ', req.headers['authorization'])
+  res.set('csrf-token', req.headers['csrf-token'])
+  res.set('authorization', req.headers['authorization'])
   sendJSONresponse(res, 200, { 'response': 'success', 'redirect': 'https://localhost:3000/userhome' })
-
 }
-
 
 module.exports.ajaxLoginUser = function (req, res, next) {
 
@@ -766,6 +767,7 @@ module.exports.ajaxLoginUser = function (req, res, next) {
               }
 
               console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajaxLoginUser > generateJWT > token: ', token)
+              //res.set('X-CSRF-Token', csrf )
               res.set('authorization', 'Bearer ' + token)
               sendJSONresponse(res, 200, { 'response': 'success', 'token': token, 'redirect': 'https://localhost:3000/api/userhome' })
             })
